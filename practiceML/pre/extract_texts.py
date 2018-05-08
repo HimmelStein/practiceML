@@ -5,6 +5,21 @@ from pprint import pprint
 import practiceML.config as cfg
 
 
+def cleaning_texts(fdir='', odir='', rmLst=['-\n']):
+    assert fdir != odir
+    for fn in os.listdir(fdir):
+        with codecs.open(os.path.join(fdir, fn), 'r', 'utf-8-sig') as fh:
+            txtlst = []
+            for ln in fh:
+                for rmStr in rmLst:
+                    ln = ln.replace(rmStr, '')
+                txtlst.append(ln)
+
+            with codecs.open(os.path.join(odir, 'cln_'+fn), 'w', 'utf-8-sig') as oh:
+                oh.write(''.join(txtlst))
+                oh.flush()
+
+
 def extract_content_with_key(fdir='', odir='', key='type', value='paragraph'):
     """
     extract context from all json files in the given directory
@@ -53,6 +68,11 @@ def list_raw_files(dir):
     return dlst
 
 
+def extracting_texts_from_json():
+    extract_content_with_key(fdir=cfg.pwc['rawInputDir'], odir=cfg.pwc['rawTxtDir'])
+
+
+
 if __name__ == '__main__':
     problemLst = \
         ['KloecknerCo-QuarterlyReport-2017-Q1.json', 'TAGImmobilien-AnnualReport-2012.json',
@@ -79,4 +99,5 @@ if __name__ == '__main__':
          'METRO-QuarterlyReport-2013-Q2.json', 'Medigene-QuarterlyReport-2017-Q1.json',
          'MorphoSys-QuarterlyReport-2016-Q1.json']
 
-    extract_content_with_key(fdir=cfg.pwc['rawInputDir'], odir=cfg.pwc['rawTxtDir'])
+    cleaning_texts(fdir=cfg.pwc['rawTxtDir'], odir=cfg.pwc['cleanTxtDir'])
+
