@@ -72,7 +72,6 @@ def extracting_texts_from_json():
     extract_content_with_key(fdir=cfg.pwc['rawInputDir'], odir=cfg.pwc['rawTxtDir'])
 
 
-
 if __name__ == '__main__':
     problemLst = \
         ['KloecknerCo-QuarterlyReport-2017-Q1.json', 'TAGImmobilien-AnnualReport-2012.json',
