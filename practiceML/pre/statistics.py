@@ -26,7 +26,7 @@ def create_p3ml_vocab(fdir='', odir=''):
             keys.sort()
             for key in keys:
                 if isinstance(key, str):
-                    ofh.write(' '.join([key, str(counter[key])])+'\n---')
+                    ofh.write(' '.join([key, str(counter[key])])+'\n')
 
 
 if __name__ == '__main__':
