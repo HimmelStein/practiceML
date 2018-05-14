@@ -5,7 +5,7 @@ from pprint import pprint
 import practiceML.config as cfg
 
 
-def cleaning_texts(fdir='', odir='', rmLst=['-\n']):
+def cleaning_texts(fdir='', odir='', rmLst=['-'+cfg.LINESEP]):
     assert fdir != odir
     for fn in os.listdir(fdir):
         with codecs.open(os.path.join(fdir, fn), 'r', 'utf-8-sig') as fh:
