@@ -67,29 +67,7 @@ def perform_lda_analysis(txtDir='', numOfTxts=None, numOfTopics=5, maxIter=20,
     pprint(lda_result)
 
 
-
 if __name__ == '__main__':
-    warnings.simplefilter("ignore", DeprecationWarning)
-    txtLst = []
-    for fname in os.listdir(cfg.pwc['cleanTxtDir'])[:25]:
-        with codecs.open(os.path.join(cfg.pwc['cleanTxtDir'], fname), 'r', 'utf-8-sig') as fh:
-            txt = get_content_words(fh.read())
-            txtLst.append(txt)
-    txtLst = txtLst
-    vectorizer = CountVectorizer(analyzer='word', min_df=4, lowercase=True,
-                                 token_pattern='[a-zA-Z0-9]{3,}')
-
-    dataVector = vectorizer.fit_transform(txtLst)
-    dataDense = dataVector.todense()
-    print("Sparsicity: ", ((dataDense > 0).sum() / dataDense.size) * 100, "%")
-
-    lda_model = LatentDirichletAllocation(n_topics=5,
-                                          max_iter=10,
-                                          learning_method='online',
-                                          random_state=100,
-                                          batch_size=128,
-                                          evaluate_every=-1,
-                                          n_jobs=-1)
-
-    lda_result = lda_model.fit_transform(dataVector)
-    pprint(lda_result)
+    perform_lda_analysis(txtDir=cfg.pwc['cleanTxtDir'], numOfTxts=30, numOfTopics=5, maxIter=20,
+                         learningMode='online', randomState=100, batchSize=128,
+                         evaluateEvery=-1, nJobs=-1)
