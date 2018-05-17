@@ -1,6 +1,5 @@
 import numpy as np
 import warnings
-import pandas as pd
 import os
 import re
 import spacy
@@ -107,11 +106,59 @@ def perform_best_lda_analysis(txtDir='', numOfTxts=None,
     return result
 
 
+def perform_multi_lda_analysis(txtDir='', numOfTxts=None, numTopicsLst=[10,15,20,25,30], learningDecay=[]):
+    warnings.simplefilter("ignore", DeprecationWarning)
+    txtLst = []
+    for fname in os.listdir(txtDir)[:numOfTxts]:
+        with codecs.open(os.path.join(cfg.pwc['cleanTxtDir'], fname), 'r', 'utf-8-sig') as fh:
+            txt = get_content_words(fh.read())
+            txtLst.append(txt)
+    txtLst = txtLst
+    vectorizer = CountVectorizer(analyzer='word', min_df=4, lowercase=True,
+                                 token_pattern='[a-zA-Z0-9]{3,}')
+
+    dataVector = vectorizer.fit_transform(txtLst)
+    model = GridSearchCV(cv=None, error_score='raise',
+                         estimator=LatentDirichletAllocation(batch_size=128, doc_topic_prior=None,
+                                                             evaluate_every=-1, learning_decay=0.7, learning_method=None,
+                                                             learning_offset=10.0, max_doc_update_iter=100, max_iter=10,
+                                                             mean_change_tol=0.001, n_components=10, n_jobs=1,
+                                                             n_topics=None, perp_tol=0.1, random_state=None,
+                                                             topic_word_prior=None, total_samples=1000000.0, verbose=0),
+                         fit_params=None, iid=True, n_jobs=1,
+                         param_grid={'n_topics': numTopicsLst, 'learning_decay':learningDecay},
+                         pre_dispatch='2*n_jobs', refit=True, return_train_score='warn',
+                         scoring=None, verbose=0)
+    model.fit(dataVector)
+
+    logLikelyhoodsDict = dict()
+    for decay in learningDecay:
+        logLikelyhoodsDict[decay] = [round(gscore.mean_validation_score) for gscore in model.grid_scores_ if
+                                        gscore.parameters['learning_decay'] == decay]
+
+    # plot graph
+    plt.figure(figsize=(12, 8))
+    for k in logLikelyhoodsDict.keys():
+        plt.plot(numTopicsLst, logLikelyhoodsDict[k], label=k)
+    plt.title("Choosing Optimal LDA Model")
+    plt.xlabel("Num Topics")
+    plt.ylabel("Log Likelyhood Scores")
+    plt.legend(title='Learning decay', loc='best')
+    plt.show()
+
+
 if __name__ == '__main__':
-    if False:
+    processTypes = ['single', 'best', 'multi']
+    processType = 'multi'
+    if processType == 'single':
         perform_lda_analysis(txtDir=cfg.pwc['cleanTxtDir'], numOfTxts=30, numOfTopics=5, maxIter=20,
                              learningMode='online', randomState=100, batchSize=128,
                              evaluateEvery=-1, nJobs=-1)
-    else:
+    if processType == 'best':
         perform_best_lda_analysis(txtDir=cfg.pwc['cleanTxtDir'], numOfTxts=30,
                                   numTopicsLst=[10, 15, 20, 25, 30], learningDecay=[.5, .7, .9])
+
+    if processType == 'multi':
+        perform_multi_lda_analysis(txtDir=cfg.pwc['cleanTxtDir'], numOfTxts=30,
+                                  numTopicsLst=[10, 15, 20, 25, 30], learningDecay=[.1, .3, .5, .7, .9])
+
