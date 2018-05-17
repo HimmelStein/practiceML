@@ -64,6 +64,8 @@ env/
 
 # IDE files
 .idea/
+/.project
+/.pydevproject
 
 #<<<<<<< HEAD
 # dump

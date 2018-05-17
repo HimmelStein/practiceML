@@ -21,12 +21,17 @@ def create_p3ml_vocab(fdir='', odir=''):
             counter = collections.Counter(txtLst)
         ofile = 'VOC_'+fn
         codecs.open(os.path.join(odir, ofile), 'w').close()
-        with codecs.open(os.path.join(odir, ofile), 'a+') as ofh:
+        with codecs.open(os.path.join(odir, ofile), 'a+', 'utf-8-sig') as ofh:
             keys = list(counter.keys())
             keys.sort()
             for key in keys:
                 if isinstance(key, str):
                     ofh.write(' '.join([key, str(counter[key])])+'\n')
+
+
+
+
+
 
 
 if __name__ == '__main__':

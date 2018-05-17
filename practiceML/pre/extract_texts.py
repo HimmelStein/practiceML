@@ -71,6 +71,29 @@ def list_raw_files(dir):
 def extracting_texts_from_json():
     extract_content_with_key(fdir=cfg.pwc['rawInputDir'], odir=cfg.pwc['rawTxtDir'])
 
+def without_hyphens(filehandle):
+    return ''.join(filehandle).replace('-\n', '')
+
+
+def extract_text_from_json(filehandle):
+    result = []
+    for line in filehandle:
+        data = json.loads(line)
+        if data.get('type','') == 'paragraph':
+            content = data.get('content', '')
+            if type(content) == str:
+                result.append(content)
+    return '\n'.join(result)
+
+
+
+def cleaning_texts2(fdir='', odir=''):
+    return process_all_files(fdir, odir, 'cln', '.txt', without_hyphens)
+
+
+def extract_content_with_key2(fdir='', odir=''):
+    return process_all_files(fdir, odir, '', '.txt', extract_text_from_json)
+
 
 if __name__ == '__main__':
     problemLst = \
@@ -99,4 +122,3 @@ if __name__ == '__main__':
          'MorphoSys-QuarterlyReport-2016-Q1.json']
 
     cleaning_texts(fdir=cfg.pwc['rawTxtDir'], odir=cfg.pwc['cleanTxtDir'])
-
