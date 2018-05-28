@@ -1,4 +1,4 @@
-from behave import given, when, then, step
+from behave import given, when, then
 from hamcrest import assert_that, equal_to, instance_of, is_
 
 import os 
@@ -7,7 +7,7 @@ from io import StringIO
 from practiceML.pre.extract_texts import without_hyphens
 from practiceML.util.file_processing import derived_filename, process_file
 
-import features._config as cfg
+import practiceML.tests.features._config as cfg
 
 
 def text_as_in_memory_file(text):

@@ -2,7 +2,6 @@ import spacy
 import os
 import codecs
 from spacy.lang.de import German
-import re
 import collections
 import practiceML.config as cfg
 
@@ -27,11 +26,6 @@ def create_p3ml_vocab(fdir='', odir=''):
             for key in keys:
                 if isinstance(key, str):
                     ofh.write(' '.join([key, str(counter[key])])+'\n')
-
-
-
-
-
 
 
 if __name__ == '__main__':

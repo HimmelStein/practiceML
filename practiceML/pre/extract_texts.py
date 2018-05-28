@@ -3,6 +3,7 @@ import codecs
 import json
 from pprint import pprint
 import practiceML.config as cfg
+from practiceML.util.file_processing import process_all_files
 
 
 def cleaning_texts(fdir='', odir='', rmLst=['-'+cfg.LINESEP]):
@@ -71,6 +72,7 @@ def list_raw_files(dir):
 def extracting_texts_from_json():
     extract_content_with_key(fdir=cfg.pwc['rawInputDir'], odir=cfg.pwc['rawTxtDir'])
 
+
 def without_hyphens(filehandle):
     return ''.join(filehandle).replace('-\n', '')
 
@@ -84,7 +86,6 @@ def extract_text_from_json(filehandle):
             if type(content) == str:
                 result.append(content)
     return '\n'.join(result)
-
 
 
 def cleaning_texts2(fdir='', odir=''):

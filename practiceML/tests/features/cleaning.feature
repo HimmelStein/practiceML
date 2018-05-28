@@ -32,7 +32,22 @@ Feature: Textfile cleaning
       Eine bewegliche Sache wird herrenlos, wenn der Eigentümer in der Absicht, auf das Eigentum zu verzichten, 
       den Besitz der Sache aufgibt.
       """
-   
+
+    Scenario: Text ist just one hyphenated long word
+    Given the following lines of text
+      """
+      Run-
+      time-
+      test
+      """
+    When the system cleans this text
+    Then the text consists of the following lines
+      """
+      Runtim
+      etest
+      """
+
+
    Scenario Outline: Text cleaning in files
      Given a text file named "<filename>"
        And a corresponding oracle file
