@@ -67,8 +67,11 @@ env/
 /.project
 /.pydevproject
 
-#<<<<<<< HEAD
 # dump
 dump.rdb
+
 #=======
 *.out
+
+# behave tests
+*.actual.txt

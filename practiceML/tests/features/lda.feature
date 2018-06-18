@@ -1,7 +1,7 @@
-# Created by dongt at 28.05.18
+
 Feature: Latent Dirichlet Allocation
 
   Scenario: Retrieving content words
-    Given the sentence "In einem Satz sind viele schöne Worte."
+    Given the sentence "In einem Satz gibt es viele schöne Worte und einen schönen Punkt."
     When we extract the content words
-    Then we get "Satz sind viele schöne Worte"
+    Then we get "Satz geben schöne Wort schön Punkt"
